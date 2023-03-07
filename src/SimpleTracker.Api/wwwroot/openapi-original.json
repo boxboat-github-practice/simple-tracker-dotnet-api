@@ -1,0 +1,778 @@
+{
+  "openapi" : "3.0.1",
+  "info" : {
+    "description" : "This API allows management of client contracts and tracks history of employee contract assignments\n",
+    "title" : "Simple emlpoyee contract tracker api",
+    "version" : "1.0.0"
+  },
+  "servers" : [ {
+    "url" : "/"
+  } ],
+  "paths" : {
+    "/employees" : {
+      "get" : {
+        "description" : "Retrieves all employees",
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "items" : {
+                    "$ref" : "#/components/schemas/employee"
+                  },
+                  "type" : "array"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "Get all employees"
+      },
+      "post" : {
+        "description" : "Add a new employee with given name and github username",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/_employees_post_request"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/employee"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "Create new employee"
+      }
+    },
+    "/employees/{employeeId}" : {
+      "delete" : {
+        "parameters" : [ {
+          "description" : "Numeric ID of the employee",
+          "explode" : false,
+          "in" : "path",
+          "name" : "employeeId",
+          "required" : true,
+          "schema" : {
+            "type" : "integer"
+          },
+          "style" : "simple"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          }
+        },
+        "summary" : "Delete an employee by ID"
+      },
+      "get" : {
+        "parameters" : [ {
+          "description" : "Numeric ID of the employee",
+          "explode" : false,
+          "in" : "path",
+          "name" : "employeeId",
+          "required" : true,
+          "schema" : {
+            "type" : "integer"
+          },
+          "style" : "simple"
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/employee"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "Get an employee by ID"
+      },
+      "put" : {
+        "parameters" : [ {
+          "description" : "Numeric ID of the employee",
+          "explode" : false,
+          "in" : "path",
+          "name" : "employeeId",
+          "required" : true,
+          "schema" : {
+            "type" : "integer"
+          },
+          "style" : "simple"
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/_employees_post_request"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/employee"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "Update an employee by ID"
+      }
+    },
+    "/clients" : {
+      "get" : {
+        "description" : "Retrieves all clients",
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "items" : {
+                    "$ref" : "#/components/schemas/client"
+                  },
+                  "type" : "array"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "Get all clients"
+      },
+      "post" : {
+        "description" : "Add a new client with given name and url",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/_clients_post_request"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/client"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "Create new client"
+      }
+    },
+    "/clients/{clientId}" : {
+      "delete" : {
+        "parameters" : [ {
+          "description" : "Numeric ID of the client",
+          "explode" : false,
+          "in" : "path",
+          "name" : "clientId",
+          "required" : true,
+          "schema" : {
+            "type" : "integer"
+          },
+          "style" : "simple"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          }
+        },
+        "summary" : "Delete a client by ID"
+      },
+      "get" : {
+        "parameters" : [ {
+          "description" : "Numeric ID of the client",
+          "explode" : false,
+          "in" : "path",
+          "name" : "clientId",
+          "required" : true,
+          "schema" : {
+            "type" : "integer"
+          },
+          "style" : "simple"
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/client"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "Get a client by ID"
+      },
+      "put" : {
+        "parameters" : [ {
+          "description" : "Numeric ID of the client",
+          "explode" : false,
+          "in" : "path",
+          "name" : "clientId",
+          "required" : true,
+          "schema" : {
+            "type" : "integer"
+          },
+          "style" : "simple"
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/_clients_post_request"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/client"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "Update a client by ID"
+      }
+    },
+    "/contracts" : {
+      "get" : {
+        "description" : "Retrieves all contracts",
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "items" : {
+                    "$ref" : "#/components/schemas/contract"
+                  },
+                  "type" : "array"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "Get all contracts"
+      },
+      "post" : {
+        "description" : "Add a new contract with fields",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/contractPatch"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/contract"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "Create new contract"
+      }
+    },
+    "/contracts/{contractId}" : {
+      "delete" : {
+        "parameters" : [ {
+          "description" : "Numeric ID of the contract",
+          "explode" : false,
+          "in" : "path",
+          "name" : "contractId",
+          "required" : true,
+          "schema" : {
+            "type" : "integer"
+          },
+          "style" : "simple"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          }
+        },
+        "summary" : "Delete a contract by ID"
+      },
+      "get" : {
+        "parameters" : [ {
+          "description" : "Numeric ID of the contract",
+          "explode" : false,
+          "in" : "path",
+          "name" : "contractId",
+          "required" : true,
+          "schema" : {
+            "type" : "integer"
+          },
+          "style" : "simple"
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/contract"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "Get a contract by ID"
+      },
+      "put" : {
+        "parameters" : [ {
+          "description" : "Numeric ID of the contract",
+          "explode" : false,
+          "in" : "path",
+          "name" : "contractId",
+          "required" : true,
+          "schema" : {
+            "type" : "integer"
+          },
+          "style" : "simple"
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/contractPatch"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/contract"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "Update a contract by ID"
+      }
+    },
+    "/history" : {
+      "get" : {
+        "description" : "Retrieves all employee contract assignment history",
+        "parameters" : [ {
+          "description" : "numerical employee identifier",
+          "explode" : true,
+          "in" : "query",
+          "name" : "employeeId",
+          "required" : false,
+          "schema" : {
+            "type" : "integer"
+          },
+          "style" : "form"
+        }, {
+          "description" : "numerical client identifier",
+          "explode" : true,
+          "in" : "query",
+          "name" : "clientId",
+          "required" : false,
+          "schema" : {
+            "type" : "integer"
+          },
+          "style" : "form"
+        }, {
+          "description" : "numerical contract identifier",
+          "explode" : true,
+          "in" : "query",
+          "name" : "contractId",
+          "required" : false,
+          "schema" : {
+            "type" : "integer"
+          },
+          "style" : "form"
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "items" : {
+                    "$ref" : "#/components/schemas/history"
+                  },
+                  "type" : "array"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "Get all history"
+      },
+      "post" : {
+        "description" : "Add a new contract assignment with fields",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/historyPatch"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/history"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "Create new employee contract assignment"
+      }
+    },
+    "/history/{historyId}" : {
+      "delete" : {
+        "parameters" : [ {
+          "description" : "Numeric ID of the employee contract assignment",
+          "explode" : false,
+          "in" : "path",
+          "name" : "historyId",
+          "required" : true,
+          "schema" : {
+            "type" : "integer"
+          },
+          "style" : "simple"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          }
+        },
+        "summary" : "Delete an employee contract assignment by ID"
+      },
+      "get" : {
+        "parameters" : [ {
+          "description" : "Numeric ID of the employee contract assignment",
+          "explode" : false,
+          "in" : "path",
+          "name" : "historyId",
+          "required" : true,
+          "schema" : {
+            "type" : "integer"
+          },
+          "style" : "simple"
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/history"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "Get an employee contract asignment by ID"
+      },
+      "put" : {
+        "parameters" : [ {
+          "description" : "Numeric ID of the employee contract assignment",
+          "explode" : false,
+          "in" : "path",
+          "name" : "historyId",
+          "required" : true,
+          "schema" : {
+            "type" : "integer"
+          },
+          "style" : "simple"
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/historyPatch"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/contract"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "Update an employee contract assignment by ID"
+      }
+    }
+  },
+  "components" : {
+    "parameters" : {
+      "employeeId" : {
+        "description" : "numerical employee identifier",
+        "explode" : true,
+        "in" : "query",
+        "name" : "employeeId",
+        "required" : false,
+        "schema" : {
+          "type" : "integer"
+        },
+        "style" : "form"
+      },
+      "clientId" : {
+        "description" : "numerical client identifier",
+        "explode" : true,
+        "in" : "query",
+        "name" : "clientId",
+        "required" : false,
+        "schema" : {
+          "type" : "integer"
+        },
+        "style" : "form"
+      },
+      "contractId" : {
+        "description" : "numerical contract identifier",
+        "explode" : true,
+        "in" : "query",
+        "name" : "contractId",
+        "required" : false,
+        "schema" : {
+          "type" : "integer"
+        },
+        "style" : "form"
+      }
+    },
+    "schemas" : {
+      "employee" : {
+        "description" : "Employee data",
+        "example" : {
+          "github" : "github",
+          "name" : "name",
+          "id" : 0
+        },
+        "properties" : {
+          "id" : {
+            "type" : "integer"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "github" : {
+            "type" : "string"
+          }
+        },
+        "type" : "object"
+      },
+      "client" : {
+        "description" : "Client data",
+        "example" : {
+          "name" : "name",
+          "id" : 0,
+          "url" : "url"
+        },
+        "properties" : {
+          "id" : {
+            "type" : "integer"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "url" : {
+            "type" : "string"
+          }
+        },
+        "type" : "object"
+      },
+      "contract" : {
+        "description" : "Contract data",
+        "example" : {
+          "tech" : [ "tech", "tech" ],
+          "clientId" : 6,
+          "endDate" : "endDate",
+          "id" : 0,
+          "type" : "type",
+          "startDate" : "startDate"
+        },
+        "properties" : {
+          "id" : {
+            "type" : "integer"
+          },
+          "clientId" : {
+            "type" : "integer"
+          },
+          "type" : {
+            "type" : "string"
+          },
+          "startDate" : {
+            "type" : "string"
+          },
+          "endDate" : {
+            "type" : "string"
+          },
+          "tech" : {
+            "items" : {
+              "type" : "string"
+            },
+            "type" : "array"
+          }
+        },
+        "type" : "object"
+      },
+      "contractPatch" : {
+        "description" : "Contract data for update or creation",
+        "properties" : {
+          "clientId" : {
+            "type" : "integer"
+          },
+          "type" : {
+            "type" : "string"
+          },
+          "startDate" : {
+            "type" : "string"
+          },
+          "endDate" : {
+            "type" : "string"
+          },
+          "tech" : {
+            "items" : {
+              "type" : "string"
+            },
+            "type" : "array"
+          }
+        },
+        "type" : "object"
+      },
+      "history" : {
+        "description" : "employee contract assignment data",
+        "example" : {
+          "employeeName" : "employeeName",
+          "clientId" : 6,
+          "role" : "role",
+          "clientName" : "clientName",
+          "contractId" : 1,
+          "employeeId" : 5,
+          "id" : 0
+        },
+        "properties" : {
+          "id" : {
+            "type" : "integer"
+          },
+          "clientId" : {
+            "type" : "integer"
+          },
+          "contractId" : {
+            "type" : "integer"
+          },
+          "employeeId" : {
+            "type" : "integer"
+          },
+          "clientName" : {
+            "type" : "string"
+          },
+          "employeeName" : {
+            "type" : "string"
+          },
+          "role" : {
+            "type" : "string"
+          }
+        },
+        "type" : "object"
+      },
+      "historyPatch" : {
+        "description" : "employee contract assignment data for update or creation",
+        "properties" : {
+          "clientId" : {
+            "type" : "integer"
+          },
+          "contractId" : {
+            "type" : "integer"
+          },
+          "employeeId" : {
+            "type" : "integer"
+          },
+          "role" : {
+            "type" : "string"
+          }
+        },
+        "type" : "object"
+      },
+      "_employees_post_request" : {
+        "properties" : {
+          "name" : {
+            "type" : "string"
+          },
+          "github" : {
+            "type" : "string"
+          }
+        },
+        "type" : "object"
+      },
+      "_clients_post_request" : {
+        "properties" : {
+          "name" : {
+            "type" : "string"
+          },
+          "url" : {
+            "type" : "string"
+          }
+        },
+        "type" : "object"
+      }
+    }
+  }
+}
