@@ -30,6 +30,11 @@ namespace SimpleTracker.Api.Controllers
     { 
         static string rawJson;
         static List<ModelClient> clients;
+
+        static List<Employee> employees;
+        static List<Contract> contracts;
+
+        static List<History> histories;
         static HashSet<int> generatedIds;
         static DefaultApiController ()
         {
@@ -39,6 +44,18 @@ namespace SimpleTracker.Api.Controllers
             clients = result.clients.ToString() != null
             ? JsonConvert.DeserializeObject<List<ModelClient>>(result.clients.ToString())
             : default(List<ModelClient>);
+
+            employees = result.employees.ToString() != null
+            ? JsonConvert.DeserializeObject<List<Employee>>(result.employees.ToString())
+            : default(List<Employee>);
+
+            contracts = result.contracts.ToString() != null
+            ? JsonConvert.DeserializeObject<List<Contract>>(result.contracts.ToString())
+            : default(List<Contract>);
+
+             histories = result.history.ToString() != null
+            ? JsonConvert.DeserializeObject<List<History>>(result.history.ToString())
+            : default(List<History>);
             
             generatedIds = new HashSet<int>();
         }
@@ -184,7 +201,10 @@ namespace SimpleTracker.Api.Controllers
             //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
             // return StatusCode(200);
 
-            throw new NotImplementedException();
+            var contractToDelete = contracts.Find(i => i.Id == contractId);
+            contracts.Remove(contractToDelete);
+            
+            return StatusCode(200);
         }
 
         /// <summary>
@@ -202,14 +222,9 @@ namespace SimpleTracker.Api.Controllers
 
             //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
             // return StatusCode(200, default(Contract));
-            string exampleJson = null;
-            exampleJson = "{\n  \"tech\" : [ \"tech\", \"tech\" ],\n  \"clientId\" : 6,\n  \"endDate\" : \"endDate\",\n  \"id\" : 0,\n  \"type\" : \"type\",\n  \"startDate\" : \"startDate\"\n}";
+            var contractToFind = contracts.Find(i => i.Id == contractId);
             
-            var example = exampleJson != null
-            ? JsonConvert.DeserializeObject<Contract>(exampleJson)
-            : default(Contract);
-            //TODO: Change the data returned
-            return new ObjectResult(example);
+            return new ObjectResult(contractToFind);
         }
 
         /// <summary>
@@ -229,14 +244,16 @@ namespace SimpleTracker.Api.Controllers
 
             //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
             // return StatusCode(200, default(Contract));
-            string exampleJson = null;
-            exampleJson = "{\n  \"tech\" : [ \"tech\", \"tech\" ],\n  \"clientId\" : 6,\n  \"endDate\" : \"endDate\",\n  \"id\" : 0,\n  \"type\" : \"type\",\n  \"startDate\" : \"startDate\"\n}";
-            
-            var example = exampleJson != null
-            ? JsonConvert.DeserializeObject<Contract>(exampleJson)
+            var contractToChange = contracts.Find(i => i.Id == contractId);
+            contractToChange.EndDate = contractPatch.EndDate;
+            contractToChange.StartDate = contractPatch.StartDate;
+            contractToChange.Tech = contractPatch.Tech;
+
+            var updatedContract = contractToChange.ToJson() != null
+            ? JsonConvert.DeserializeObject<Contract>(contractToChange.ToJson())
             : default(Contract);
-            //TODO: Change the data returned
-            return new ObjectResult(example);
+
+            return new ObjectResult(updatedContract);
         }
 
         /// <summary>
@@ -254,14 +271,7 @@ namespace SimpleTracker.Api.Controllers
 
             //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
             // return StatusCode(200, default(List<Contract>));
-            string exampleJson = null;
-            exampleJson = "[ {\n  \"tech\" : [ \"tech\", \"tech\" ],\n  \"clientId\" : 6,\n  \"endDate\" : \"endDate\",\n  \"id\" : 0,\n  \"type\" : \"type\",\n  \"startDate\" : \"startDate\"\n}, {\n  \"tech\" : [ \"tech\", \"tech\" ],\n  \"clientId\" : 6,\n  \"endDate\" : \"endDate\",\n  \"id\" : 0,\n  \"type\" : \"type\",\n  \"startDate\" : \"startDate\"\n} ]";
-            
-            var example = exampleJson != null
-            ? JsonConvert.DeserializeObject<List<Contract>>(exampleJson)
-            : default(List<Contract>);
-            //TODO: Change the data returned
-            return new ObjectResult(example);
+            return new ObjectResult(contracts);
         }
 
         /// <summary>
@@ -281,14 +291,23 @@ namespace SimpleTracker.Api.Controllers
 
             //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
             // return StatusCode(200, default(Contract));
-            string exampleJson = null;
-            exampleJson = "{\n  \"tech\" : [ \"tech\", \"tech\" ],\n  \"clientId\" : 6,\n  \"endDate\" : \"endDate\",\n  \"id\" : 0,\n  \"type\" : \"type\",\n  \"startDate\" : \"startDate\"\n}";
+            Contract c = new Contract();
+            c.Id = GetNewID();
+            c.ClientId = contractPatch.ClientId;
+            c.EndDate = contractPatch.EndDate;
+            c.StartDate = contractPatch.StartDate;
+            c.Tech = contractPatch.Tech;
+
+            contracts.Add(c);
+
+            string newContractJson = null;
+            newContractJson = c.ToJson();
             
-            var example = exampleJson != null
-            ? JsonConvert.DeserializeObject<Contract>(exampleJson)
+            var newContract = newContractJson != null
+            ? JsonConvert.DeserializeObject<Contract>(newContractJson)
             : default(Contract);
-            //TODO: Change the data returned
-            return new ObjectResult(example);
+    
+            return new ObjectResult(newContract);
         }
 
         /// <summary>
@@ -306,7 +325,10 @@ namespace SimpleTracker.Api.Controllers
             //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
             // return StatusCode(200);
 
-            throw new NotImplementedException();
+            var employeeToDelete = employees.Find(i => i.Id == employeeId);
+            employees.Remove(employeeToDelete);
+            
+            return StatusCode(200);
         }
 
         /// <summary>
@@ -324,14 +346,9 @@ namespace SimpleTracker.Api.Controllers
 
             //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
             // return StatusCode(200, default(Employee));
-            string exampleJson = null;
-            exampleJson = "{\n  \"github\" : \"github\",\n  \"name\" : \"name\",\n  \"id\" : 0\n}";
+            var employeeToFind = employees.Find(i => i.Id == employeeId);
             
-            var example = exampleJson != null
-            ? JsonConvert.DeserializeObject<Employee>(exampleJson)
-            : default(Employee);
-            //TODO: Change the data returned
-            return new ObjectResult(example);
+            return new ObjectResult(employeeToFind);
         }
 
         /// <summary>
@@ -351,14 +368,15 @@ namespace SimpleTracker.Api.Controllers
 
             //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
             // return StatusCode(200, default(Employee));
-            string exampleJson = null;
-            exampleJson = "{\n  \"github\" : \"github\",\n  \"name\" : \"name\",\n  \"id\" : 0\n}";
-            
-            var example = exampleJson != null
-            ? JsonConvert.DeserializeObject<Employee>(exampleJson)
+            var employeeToChange = employees.Find(i => i.Id == employeeId);
+            employeeToChange.Github = employeesPostRequest.Github;
+            employeeToChange.Name = employeesPostRequest.Name;
+
+            var updatedEmployee = employeeToChange.ToJson() != null
+            ? JsonConvert.DeserializeObject<Employee>(employeeToChange.ToJson())
             : default(Employee);
-            //TODO: Change the data returned
-            return new ObjectResult(example);
+
+            return new ObjectResult(updatedEmployee);
         }
 
         /// <summary>
@@ -376,14 +394,7 @@ namespace SimpleTracker.Api.Controllers
 
             //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
             // return StatusCode(200, default(List<Employee>));
-            string exampleJson = null;
-            exampleJson = "[ {\n  \"github\" : \"github\",\n  \"name\" : \"name\",\n  \"id\" : 0\n}, {\n  \"github\" : \"github\",\n  \"name\" : \"name\",\n  \"id\" : 0\n} ]";
-            
-            var example = exampleJson != null
-            ? JsonConvert.DeserializeObject<List<Employee>>(exampleJson)
-            : default(List<Employee>);
-            //TODO: Change the data returned
-            return new ObjectResult(example);
+            return new ObjectResult(employees);
         }
 
         /// <summary>
@@ -403,14 +414,21 @@ namespace SimpleTracker.Api.Controllers
 
             //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
             // return StatusCode(200, default(Employee));
-            string exampleJson = null;
-            exampleJson = "{\n  \"github\" : \"github\",\n  \"name\" : \"name\",\n  \"id\" : 0\n}";
+            Employee e = new Employee();
+            e.Id = GetNewID();
+            e.Github = employeesPostRequest.Github;
+            e.Name = employeesPostRequest.Name;
+
+            employees.Add(e);
             
-            var example = exampleJson != null
-            ? JsonConvert.DeserializeObject<Employee>(exampleJson)
+            string newEmployeeJson = null;
+            newEmployeeJson = e.ToJson();
+            
+            var newEmployee = newEmployeeJson != null
+            ? JsonConvert.DeserializeObject<Employee>(newEmployeeJson)
             : default(Employee);
-            //TODO: Change the data returned
-            return new ObjectResult(example);
+    
+            return new ObjectResult(newEmployee);
         }
 
         /// <summary>
@@ -431,14 +449,7 @@ namespace SimpleTracker.Api.Controllers
 
             //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
             // return StatusCode(200, default(List<History>));
-            string exampleJson = null;
-            exampleJson = "[ {\n  \"employeeName\" : \"employeeName\",\n  \"clientId\" : 6,\n  \"role\" : \"role\",\n  \"clientName\" : \"clientName\",\n  \"contractId\" : 1,\n  \"employeeId\" : 5,\n  \"id\" : 0\n}, {\n  \"employeeName\" : \"employeeName\",\n  \"clientId\" : 6,\n  \"role\" : \"role\",\n  \"clientName\" : \"clientName\",\n  \"contractId\" : 1,\n  \"employeeId\" : 5,\n  \"id\" : 0\n} ]";
-            
-            var example = exampleJson != null
-            ? JsonConvert.DeserializeObject<List<History>>(exampleJson)
-            : default(List<History>);
-            //TODO: Change the data returned
-            return new ObjectResult(example);
+            return new ObjectResult(histories);
         }
 
         /// <summary>
@@ -453,10 +464,10 @@ namespace SimpleTracker.Api.Controllers
         public virtual IActionResult HistoryHistoryIdDelete([FromRoute (Name = "historyId")][Required]int historyId)
         {
 
-            //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(200);
-
-            throw new NotImplementedException();
+            var historyToDelete = histories.Find(i => i.Id == historyId);
+            histories.Remove(historyToDelete);
+            
+            return StatusCode(200);
         }
 
         /// <summary>
@@ -474,14 +485,9 @@ namespace SimpleTracker.Api.Controllers
 
             //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
             // return StatusCode(200, default(History));
-            string exampleJson = null;
-            exampleJson = "{\n  \"employeeName\" : \"employeeName\",\n  \"clientId\" : 6,\n  \"role\" : \"role\",\n  \"clientName\" : \"clientName\",\n  \"contractId\" : 1,\n  \"employeeId\" : 5,\n  \"id\" : 0\n}";
+            var historyToFind = histories.Find(i => i.Id == historyId);
             
-            var example = exampleJson != null
-            ? JsonConvert.DeserializeObject<History>(exampleJson)
-            : default(History);
-            //TODO: Change the data returned
-            return new ObjectResult(example);
+            return new ObjectResult(historyToFind);
         }
 
         /// <summary>
@@ -499,16 +505,17 @@ namespace SimpleTracker.Api.Controllers
         public virtual IActionResult HistoryHistoryIdPut([FromRoute (Name = "historyId")][Required]int historyId, [FromBody]HistoryPatch historyPatch)
         {
 
-            //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(200, default(Contract));
-            string exampleJson = null;
-            exampleJson = "{\n  \"tech\" : [ \"tech\", \"tech\" ],\n  \"clientId\" : 6,\n  \"endDate\" : \"endDate\",\n  \"id\" : 0,\n  \"type\" : \"type\",\n  \"startDate\" : \"startDate\"\n}";
-            
-            var example = exampleJson != null
-            ? JsonConvert.DeserializeObject<Contract>(exampleJson)
-            : default(Contract);
-            //TODO: Change the data returned
-            return new ObjectResult(example);
+            var historyToChange = histories.Find(i => i.Id == historyId);
+            historyToChange.ClientId = historyPatch.ClientId;
+            historyToChange.ContractId = historyPatch.ContractId;
+            historyToChange.EmployeeId = historyPatch.EmployeeId;
+            historyToChange.Role = historyPatch.Role;
+
+            var updatedHistory = historyToChange.ToJson() != null
+            ? JsonConvert.DeserializeObject<History>(historyToChange.ToJson())
+            : default(History);
+
+            return new ObjectResult(updatedHistory);
         }
 
         /// <summary>
@@ -528,14 +535,25 @@ namespace SimpleTracker.Api.Controllers
 
             //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
             // return StatusCode(200, default(History));
-            string exampleJson = null;
-            exampleJson = "{\n  \"employeeName\" : \"employeeName\",\n  \"clientId\" : 6,\n  \"role\" : \"role\",\n  \"clientName\" : \"clientName\",\n  \"contractId\" : 1,\n  \"employeeId\" : 5,\n  \"id\" : 0\n}";
+            History h = new History();
+            h.Id = GetNewID();
+            h.ClientId = historyPatch.ClientId;
+            h.ClientName = "Client Name";
+            h.ContractId = historyPatch.ContractId;
+            h.EmployeeId = historyPatch.EmployeeId;
+            h.EmployeeName = "Employee Name";
+            h.Role = historyPatch.Role;
+
+            histories.Add(h);
             
-            var example = exampleJson != null
-            ? JsonConvert.DeserializeObject<History>(exampleJson)
+            string newHistoryJson = null;
+            newHistoryJson = h.ToJson();
+            
+            var newHistory = newHistoryJson != null
+            ? JsonConvert.DeserializeObject<History>(newHistoryJson)
             : default(History);
-            //TODO: Change the data returned
-            return new ObjectResult(example);
+    
+            return new ObjectResult(newHistory);
         }
     }
 }

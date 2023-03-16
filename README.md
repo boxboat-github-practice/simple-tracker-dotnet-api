@@ -29,7 +29,7 @@ dotnet outdated --upgrade
 ```
 
 
-## Run
+## Build
 
 Linux/OS X:
 
@@ -42,6 +42,13 @@ Windows:
 ```
 build.bat
 ```
+
+## Run
+
+```
+dotnet run -p src/SimpleTracker.Api/SimpleTracker.Api.csproj
+```
+
 ## Run in Docker
 
 ```
