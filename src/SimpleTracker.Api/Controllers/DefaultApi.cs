@@ -28,6 +28,33 @@ namespace SimpleTracker.Api.Controllers
     [ApiController]
     public class DefaultApiController : ControllerBase
     { 
+        static string rawJson;
+        static List<ModelClient> clients;
+        static HashSet<int> generatedIds;
+        static DefaultApiController ()
+        {
+            rawJson = System.IO.File.ReadAllText(@"sample.json");
+            dynamic result = Newtonsoft.Json.JsonConvert.DeserializeObject(rawJson);
+
+            clients = result.clients.ToString() != null
+            ? JsonConvert.DeserializeObject<List<ModelClient>>(result.clients.ToString())
+            : default(List<ModelClient>);
+            
+            generatedIds = new HashSet<int>();
+        }
+
+        static int GetNewID()
+        {
+            Random rnd = new Random();
+            int testRand = rnd.Next(256, 512);
+
+            while(generatedIds.Contains(testRand))
+            {
+                testRand = rnd.Next(256, 512);
+            }
+            return testRand;
+        }
+
         /// <summary>
         /// Delete a client by ID
         /// </summary>
@@ -41,9 +68,12 @@ namespace SimpleTracker.Api.Controllers
         {
 
             //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(200);
+            // return StatusCode(200)
 
-            throw new NotImplementedException();
+            var clientToDelete = clients.Find(i => i.Id == clientId);
+            clients.Remove(clientToDelete);
+            
+            return StatusCode(200);
         }
 
         /// <summary>
@@ -60,16 +90,9 @@ namespace SimpleTracker.Api.Controllers
         {
             //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
             // return StatusCode(200, default(ModelClient));
-            string exampleJson, rawJson = null;
-            rawJson = System.IO.File.ReadAllText(@"sample.json");
-            dynamic result = Newtonsoft.Json.JsonConvert.DeserializeObject(rawJson); 
-            exampleJson = result.clients[clientId].ToString();
+            var clientToFind = clients.Find(i => i.Id == clientId);
             
-            var example = exampleJson != null
-            ? JsonConvert.DeserializeObject<ModelClient>(exampleJson)
-            : default(ModelClient);
-            //TODO: Change the data returned
-            return new ObjectResult(example);
+            return new ObjectResult(clientToFind);
         }
 
         /// <summary>
@@ -86,19 +109,15 @@ namespace SimpleTracker.Api.Controllers
         [SwaggerResponse(statusCode: 200, type: typeof(ModelClient), description: "OK")]
         public virtual IActionResult ClientsClientIdPut([FromRoute (Name = "clientId")][Required]int clientId, [FromBody]ClientsPostRequest clientsPostRequest)
         {
+            var clientToChange = clients.Find(i => i.Id == clientId);
+            clientToChange.Name = clientsPostRequest.Name;
+            clientToChange.Url = clientsPostRequest.Url;
 
-            //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(200, default(ModelClient));
-            string exampleJson, rawJson = null;
-            rawJson = System.IO.File.ReadAllText(@"sample.json");
-            dynamic result = Newtonsoft.Json.JsonConvert.DeserializeObject(rawJson); 
-            exampleJson = result.clients.ToString();
-            
-            var example = exampleJson != null
-            ? JsonConvert.DeserializeObject<ModelClient>(exampleJson)
+            var updatedClient = clientToChange.ToJson() != null
+            ? JsonConvert.DeserializeObject<ModelClient>(clientToChange.ToJson())
             : default(ModelClient);
-            //TODO: Change the data returned
-            return new ObjectResult(example);
+
+            return new ObjectResult(updatedClient);
         }
 
         /// <summary>
@@ -116,16 +135,7 @@ namespace SimpleTracker.Api.Controllers
 
             //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
             // return StatusCode(200, default(List<ModelClient>));
-            string exampleJson, rawJson = null;
-            rawJson = System.IO.File.ReadAllText(@"sample.json");
-            dynamic result = Newtonsoft.Json.JsonConvert.DeserializeObject(rawJson); 
-            exampleJson = result.clients.ToString();
-            
-            var example = exampleJson != null
-            ? JsonConvert.DeserializeObject<List<ModelClient>>(exampleJson)
-            : default(List<ModelClient>);
-            //TODO: Change the data returned
-            return new ObjectResult(example);
+            return new ObjectResult(clients);
         }
 
         /// <summary>
@@ -142,19 +152,21 @@ namespace SimpleTracker.Api.Controllers
         [SwaggerResponse(statusCode: 200, type: typeof(ModelClient), description: "OK")]
         public virtual IActionResult ClientsPost([FromBody]ClientsPostRequest clientsPostRequest)
         {
+            ModelClient mc = new ModelClient();
+            mc.Id = GetNewID();
+            mc.Name = clientsPostRequest.Name;
+            mc.Url = clientsPostRequest.Url;
 
-            //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(200, default(ModelClient));
-            string exampleJson, rawJson = null;
-            rawJson = System.IO.File.ReadAllText(@"sample.json");
-            dynamic result = Newtonsoft.Json.JsonConvert.DeserializeObject(rawJson); 
-            exampleJson = result.clients.ToString();
+            clients.Add(mc);
+
+            string newClientJson = null;
+            newClientJson = mc.ToJson();
             
-            var example = exampleJson != null
-            ? JsonConvert.DeserializeObject<ModelClient>(exampleJson)
+            var newClient = newClientJson != null
+            ? JsonConvert.DeserializeObject<ModelClient>(newClientJson)
             : default(ModelClient);
-            //TODO: Change the data returned
-            return new ObjectResult(example);
+    
+            return new ObjectResult(newClient);
         }
 
         /// <summary>
