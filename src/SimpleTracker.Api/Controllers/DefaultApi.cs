@@ -88,7 +88,7 @@ namespace SimpleTracker.Api.Controllers
             //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
             // return StatusCode(200)
             var clientToDelete = clients.Find(i => i.Id == clientId);
-            if(clientToDelete.Id.Equals(default(int)))
+            if(clientToDelete == null)
             {
                 return NotFound();
             }
@@ -141,7 +141,7 @@ namespace SimpleTracker.Api.Controllers
                 return BadRequest();
             }
             var clientToChange = clients.Find(i => i.Id == clientId);
-            if(clientToChange.Id.Equals(default(int)))
+            if(clientToChange == null)
             {
                 return NotFound();
             }
@@ -220,7 +220,7 @@ namespace SimpleTracker.Api.Controllers
             // return StatusCode(200);
 
             var contractToDelete = contracts.Find(i => i.Id == contractId);
-            if(contractToDelete.Id.Equals(default(int)))
+            if(contractToDelete == null)
             {
                 return NotFound();
             }
@@ -277,7 +277,7 @@ namespace SimpleTracker.Api.Controllers
                 return BadRequest();
             }
             var contractToChange = contracts.Find(i => i.Id == contractId);
-            if(contractToChange.Id.Equals(default(int)))
+            if(contractToChange == null)
             {
                 return NotFound();
             }
@@ -370,7 +370,7 @@ namespace SimpleTracker.Api.Controllers
 
             var employeeToDelete = employees.Find(i => i.Id == employeeId);
 
-            if(employeeToDelete.Id.Equals(default(int)))
+            if(employeeToDelete == null)
             {
                 return NotFound();
             }
@@ -426,7 +426,7 @@ namespace SimpleTracker.Api.Controllers
                 return BadRequest();
             }
             var employeeToChange = employees.Find(i => i.Id == employeeId);
-            if(employeeToChange.Id.Equals(default(int)))
+            if(employeeToChange == null)
             {
                 return NotFound();
             }
@@ -527,7 +527,7 @@ namespace SimpleTracker.Api.Controllers
         {
 
             var historyToDelete = histories.Find(i => i.Id == historyId);
-            if(historyToDelete.Id.Equals(default(int)))
+            if(historyToDelete == null)
             {
                 return NotFound();
             }
@@ -578,7 +578,7 @@ namespace SimpleTracker.Api.Controllers
 
             var historyToChange = histories.Find(i => i.Id == historyId);
 
-            if(historyToChange.Id.Equals(default(int)))
+            if(historyToChange == null)
             {
                 return NotFound();
             }
