@@ -17,6 +17,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
 using Newtonsoft.Json;
 using SimpleTracker.Api.Converters;
+using System.Dynamic;
 
 namespace SimpleTracker.Api.Models
 { 
@@ -24,17 +25,33 @@ namespace SimpleTracker.Api.Models
     /// 
     /// </summary>
     [DataContract]
-    public partial class ClientsPostRequest : IEquatable<ClientsPostRequest>
+    public partial class ClientsPostRequest : DynamicObject,IEquatable<ClientsPostRequest>
     {
+        /// <summary>
+        /// Flag For Extra Request Body Parameters
+        /// </summary>
+        public bool ContainsExtra { get; private set; }
+
+        /// <summary>
+        /// Gets Or Sets Flag For Extra Request Body Parameters
+        /// </summary>
+        public override bool TrySetMember(SetMemberBinder binder, object value)
+        {
+             this.ContainsExtra = true;
+             return true;
+        }
+        
         /// <summary>
         /// Gets or Sets Name
         /// </summary>
+        [Required]
         [DataMember(Name="name", EmitDefaultValue=false)]
         public string Name { get; set; }
 
         /// <summary>
         /// Gets or Sets Url
         /// </summary>
+        [Required]
         [DataMember(Name="url", EmitDefaultValue=false)]
         public string Url { get; set; }
 

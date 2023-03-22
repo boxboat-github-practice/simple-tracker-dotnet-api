@@ -87,8 +87,11 @@ namespace SimpleTracker.Api.Controllers
 
             //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
             // return StatusCode(200)
-
             var clientToDelete = clients.Find(i => i.Id == clientId);
+            if(clientToDelete.Id.Equals(default(int)))
+            {
+                return NotFound();
+            }
             clients.Remove(clientToDelete);
             
             return StatusCode(200);
@@ -108,7 +111,13 @@ namespace SimpleTracker.Api.Controllers
         {
             //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
             // return StatusCode(200, default(ModelClient));
+            
             var clientToFind = clients.Find(i => i.Id == clientId);
+
+            if(clientToFind.Id.Equals(default(int)))
+            {
+                return NotFound();
+            }
             
             return new ObjectResult(clientToFind);
         }
@@ -127,7 +136,15 @@ namespace SimpleTracker.Api.Controllers
         [SwaggerResponse(statusCode: 200, type: typeof(ModelClient), description: "OK")]
         public virtual IActionResult ClientsClientIdPut([FromRoute (Name = "clientId")][Required]int clientId, [FromBody]ClientsPostRequest clientsPostRequest)
         {
+            if(clientsPostRequest.ContainsExtra)
+            {
+                return BadRequest();
+            }
             var clientToChange = clients.Find(i => i.Id == clientId);
+            if(clientToChange.Id.Equals(default(int)))
+            {
+                return NotFound();
+            }
             clientToChange.Name = clientsPostRequest.Name;
             clientToChange.Url = clientsPostRequest.Url;
 
@@ -203,6 +220,10 @@ namespace SimpleTracker.Api.Controllers
             // return StatusCode(200);
 
             var contractToDelete = contracts.Find(i => i.Id == contractId);
+            if(contractToDelete.Id.Equals(default(int)))
+            {
+                return NotFound();
+            }
             contracts.Remove(contractToDelete);
             
             return StatusCode(200);
@@ -245,7 +266,15 @@ namespace SimpleTracker.Api.Controllers
 
             //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
             // return StatusCode(200, default(Contract));
+            if(contractPatch.ContainsExtra)
+            {
+                return BadRequest();
+            }
             var contractToChange = contracts.Find(i => i.Id == contractId);
+            if(contractToChange.Id.Equals(default(int)))
+            {
+                return NotFound();
+            }
             contractToChange.EndDate = contractPatch.EndDate;
             contractToChange.StartDate = contractPatch.StartDate;
             contractToChange.Tech = contractPatch.Tech;
@@ -292,12 +321,17 @@ namespace SimpleTracker.Api.Controllers
 
             //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
             // return StatusCode(200, default(Contract));
+            if (contractPatch.ClientId < 1)
+            {
+                return BadRequest();
+            }
             Contract c = new Contract();
             c.Id = GetNewID();
             c.ClientId = contractPatch.ClientId;
             c.EndDate = contractPatch.EndDate;
             c.StartDate = contractPatch.StartDate;
             c.Tech = contractPatch.Tech;
+            c.Type = contractPatch.Type;
 
             contracts.Add(c);
 
@@ -327,6 +361,11 @@ namespace SimpleTracker.Api.Controllers
             // return StatusCode(200);
 
             var employeeToDelete = employees.Find(i => i.Id == employeeId);
+
+            if(employeeToDelete.Id.Equals(default(int)))
+            {
+                return NotFound();
+            }
             employees.Remove(employeeToDelete);
             
             return StatusCode(200);
@@ -348,6 +387,11 @@ namespace SimpleTracker.Api.Controllers
             //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
             // return StatusCode(200, default(Employee));
             var employeeToFind = employees.Find(i => i.Id == employeeId);
+
+            if(employeeToFind.Id.Equals(default(int)))
+            {
+                return NotFound();
+            }
             
             return new ObjectResult(employeeToFind);
         }
@@ -374,6 +418,11 @@ namespace SimpleTracker.Api.Controllers
                 return BadRequest();
             }
             var employeeToChange = employees.Find(i => i.Id == employeeId);
+            if(employeeToChange.Id.Equals(default(int)))
+            {
+                return NotFound();
+            }
+
             employeeToChange.Github = employeesPostRequest.Github;
             employeeToChange.Name = employeesPostRequest.Name;
 
@@ -470,6 +519,10 @@ namespace SimpleTracker.Api.Controllers
         {
 
             var historyToDelete = histories.Find(i => i.Id == historyId);
+            if(historyToDelete.Id.Equals(default(int)))
+            {
+                return NotFound();
+            }
             histories.Remove(historyToDelete);
             
             return StatusCode(200);
@@ -491,6 +544,11 @@ namespace SimpleTracker.Api.Controllers
             //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
             // return StatusCode(200, default(History));
             var historyToFind = histories.Find(i => i.Id == historyId);
+
+             if(historyToFind.Id.Equals(default(int)))
+            {
+                return NotFound();
+            }
             
             return new ObjectResult(historyToFind);
         }
@@ -511,6 +569,12 @@ namespace SimpleTracker.Api.Controllers
         {
 
             var historyToChange = histories.Find(i => i.Id == historyId);
+
+            if(historyToChange.Id.Equals(default(int)))
+            {
+                return NotFound();
+            }
+
             historyToChange.ClientId = historyPatch.ClientId;
             historyToChange.ContractId = historyPatch.ContractId;
             historyToChange.EmployeeId = historyPatch.EmployeeId;
@@ -537,6 +601,10 @@ namespace SimpleTracker.Api.Controllers
         [SwaggerResponse(statusCode: 200, type: typeof(History), description: "OK")]
         public virtual IActionResult HistoryPost([FromBody]HistoryPatch historyPatch)
         {
+            if (historyPatch.ClientId < 1 || historyPatch.ContractId < 1 || historyPatch.EmployeeId < 1)
+            {
+                return BadRequest();
+            }
 
             //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
             // return StatusCode(200, default(History));

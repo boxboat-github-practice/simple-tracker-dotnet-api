@@ -29,24 +29,28 @@ namespace SimpleTracker.Api.Models
         /// <summary>
         /// Gets or Sets ClientId
         /// </summary>
+        [Required]
         [DataMember(Name="clientId", EmitDefaultValue=true)]
         public int ClientId { get; set; }
 
         /// <summary>
         /// Gets or Sets ContractId
         /// </summary>
+        [Required]
         [DataMember(Name="contractId", EmitDefaultValue=true)]
         public int ContractId { get; set; }
 
         /// <summary>
         /// Gets or Sets EmployeeId
         /// </summary>
+        [Required]
         [DataMember(Name="employeeId", EmitDefaultValue=true)]
         public int EmployeeId { get; set; }
 
         /// <summary>
         /// Gets or Sets Role
         /// </summary>
+        [Required]
         [DataMember(Name="role", EmitDefaultValue=false)]
         public string Role { get; set; }
 

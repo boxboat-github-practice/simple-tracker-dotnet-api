@@ -40,17 +40,19 @@ namespace SimpleTracker.Api.Models
              this.ContainsExtra = true;
              return true;
         }
-        
+
         /// <summary>
         /// Gets or Sets Name
         /// </summary>
         [DataMember(Name="name", EmitDefaultValue=false)]
+        [Required]
         public string Name { get; set; }
 
         /// <summary>
         /// Gets or Sets Github
         /// </summary>
         [DataMember(Name="github", EmitDefaultValue=false)]
+        [Required]
         public string Github { get; set; }
 
         /// <summary>

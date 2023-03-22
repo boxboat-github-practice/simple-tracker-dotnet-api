@@ -17,6 +17,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
 using Newtonsoft.Json;
 using SimpleTracker.Api.Converters;
+using System.Dynamic;
 
 namespace SimpleTracker.Api.Models
 { 
@@ -24,35 +25,54 @@ namespace SimpleTracker.Api.Models
     /// Contract data for update or creation
     /// </summary>
     [DataContract]
-    public partial class ContractPatch : IEquatable<ContractPatch>
+    public partial class ContractPatch : DynamicObject,IEquatable<ContractPatch>
     {
+         /// <summary>
+        /// Flag For Extra Request Body Parameters
+        /// </summary>
+        public bool ContainsExtra { get; private set; }
+
+         /// <summary>
+        /// Gets Or Sets Flag For Extra Request Body Parameters
+        /// </summary>
+        public override bool TrySetMember(SetMemberBinder binder, object value)
+        {
+             this.ContainsExtra = true;
+             return true;
+        }
+
         /// <summary>
         /// Gets or Sets ClientId
         /// </summary>
+        [Required]
         [DataMember(Name="clientId", EmitDefaultValue=true)]
         public int ClientId { get; set; }
 
         /// <summary>
         /// Gets or Sets Type
         /// </summary>
+        [Required]
         [DataMember(Name="type", EmitDefaultValue=false)]
         public string Type { get; set; }
 
         /// <summary>
         /// Gets or Sets StartDate
         /// </summary>
+        [Required]
         [DataMember(Name="startDate", EmitDefaultValue=false)]
         public string StartDate { get; set; }
 
         /// <summary>
         /// Gets or Sets EndDate
         /// </summary>
+        [Required]
         [DataMember(Name="endDate", EmitDefaultValue=false)]
         public string EndDate { get; set; }
 
         /// <summary>
         /// Gets or Sets Tech
         /// </summary>
+        [Required]
         [DataMember(Name="tech", EmitDefaultValue=false)]
         public List<string> Tech { get; set; }
 
