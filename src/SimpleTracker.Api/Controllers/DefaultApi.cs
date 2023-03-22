@@ -19,6 +19,7 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 using Newtonsoft.Json;
 using SimpleTracker.Api.Attributes;
 using SimpleTracker.Api.Models;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace SimpleTracker.Api.Controllers
 { 
@@ -365,9 +366,13 @@ namespace SimpleTracker.Api.Controllers
         [SwaggerResponse(statusCode: 200, type: typeof(Employee), description: "OK")]
         public virtual IActionResult EmployeesEmployeeIdPut([FromRoute (Name = "employeeId")][Required]int employeeId, [FromBody]EmployeesPostRequest employeesPostRequest)
         {
-
             //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
             // return StatusCode(200, default(Employee));
+
+            if(employeesPostRequest.ContainsExtra)
+            {
+                return BadRequest();
+            }
             var employeeToChange = employees.Find(i => i.Id == employeeId);
             employeeToChange.Github = employeesPostRequest.Github;
             employeeToChange.Name = employeesPostRequest.Name;
