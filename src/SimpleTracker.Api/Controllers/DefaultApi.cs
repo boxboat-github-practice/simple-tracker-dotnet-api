@@ -114,7 +114,7 @@ namespace SimpleTracker.Api.Controllers
             
             var clientToFind = clients.Find(i => i.Id == clientId);
 
-            if(clientToFind.Id.Equals(default(int)))
+            if(clientToFind == null)
             {
                 return NotFound();
             }
@@ -245,6 +245,12 @@ namespace SimpleTracker.Api.Controllers
             //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
             // return StatusCode(200, default(Contract));
             var contractToFind = contracts.Find(i => i.Id == contractId);
+            if (contractToFind == null)
+            {
+                return NotFound();
+            }
+
+
             
             return new ObjectResult(contractToFind);
         }
@@ -278,6 +284,8 @@ namespace SimpleTracker.Api.Controllers
             contractToChange.EndDate = contractPatch.EndDate;
             contractToChange.StartDate = contractPatch.StartDate;
             contractToChange.Tech = contractPatch.Tech;
+            contractToChange.ClientId = contractPatch.ClientId;
+            contractToChange.Type = contractPatch.Type;
 
             var updatedContract = contractToChange.ToJson() != null
             ? JsonConvert.DeserializeObject<Contract>(contractToChange.ToJson())
@@ -388,7 +396,7 @@ namespace SimpleTracker.Api.Controllers
             // return StatusCode(200, default(Employee));
             var employeeToFind = employees.Find(i => i.Id == employeeId);
 
-            if(employeeToFind.Id.Equals(default(int)))
+            if(employeeToFind == null)
             {
                 return NotFound();
             }
@@ -545,7 +553,7 @@ namespace SimpleTracker.Api.Controllers
             // return StatusCode(200, default(History));
             var historyToFind = histories.Find(i => i.Id == historyId);
 
-             if(historyToFind.Id.Equals(default(int)))
+             if(historyToFind == null)
             {
                 return NotFound();
             }
