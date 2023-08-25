@@ -9,9 +9,9 @@ namespace SimpleTracker.Api.Data
         {
         }
 
-        public DbSet<Employee> Employee { get; set; }
-        public DbSet<ModelClient> Client { get; set; }
-        public DbSet<Contract> Contract { get; set; }
-        public DbSet<History> History { get; set; }
+        public DbSet<Employee> employees { get; set; }
+        public DbSet<ModelClient> clients { get; set; }
+        public DbSet<Contract> contracts { get; set; }
+        public DbSet<History> histories { get; set; }
     }
 }

@@ -26,8 +26,9 @@ using SimpleTracker.Api.OpenApi;
 using SimpleTracker.Api.Formatters;
 using SimpleTracker.Api.Data;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
 
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using SimpleTracker.Api.Controllers;
 
 namespace SimpleTracker.Api
 {
@@ -59,6 +60,7 @@ namespace SimpleTracker.Api
             services.AddDbContext<SimpleTrackerContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
+            services.AddSingleton<IConfiguration>(Configuration);
 
             // Add framework services.
             services
@@ -74,6 +76,7 @@ namespace SimpleTracker.Api
                         NamingStrategy = new CamelCaseNamingStrategy()
                     });
                 });
+
 
             services
                 .AddSwaggerGen(c =>
@@ -107,6 +110,7 @@ namespace SimpleTracker.Api
                 });
                 services
                     .AddSwaggerGenNewtonsoftSupport();
+
         }
 
         /// <summary>

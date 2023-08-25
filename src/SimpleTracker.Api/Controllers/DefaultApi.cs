@@ -20,6 +20,12 @@ using Newtonsoft.Json;
 using SimpleTracker.Api.Attributes;
 using SimpleTracker.Api.Models;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using SimpleTracker.Api.Data;
+using Microsoft.EntityFrameworkCore;
+using System.Linq;
+using Microsoft.VisualBasic;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Configuration;
 
 namespace SimpleTracker.Api.Controllers
 {
@@ -37,28 +43,27 @@ namespace SimpleTracker.Api.Controllers
 
         static List<History> histories;
         static HashSet<int> generatedIds;
-        static DefaultApiController ()
+
+        static SimpleTrackerContext ctxt;
+
+        public IConfiguration configuration;
+
+        public DefaultApiController (IConfiguration cfg)
         {
-            rawJson = System.IO.File.ReadAllText(@"sample.json");
-            dynamic result = Newtonsoft.Json.JsonConvert.DeserializeObject(rawJson);
-
-            clients = result.clients.ToString() != null
-            ? JsonConvert.DeserializeObject<List<ModelClient>>(result.clients.ToString())
-            : default(List<ModelClient>);
-
-            employees = result.employees.ToString() != null
-            ? JsonConvert.DeserializeObject<List<Employee>>(result.employees.ToString())
-            : default(List<Employee>);
-
-            contracts = result.contracts.ToString() != null
-            ? JsonConvert.DeserializeObject<List<Contract>>(result.contracts.ToString())
-            : default(List<Contract>);
-
-             histories = result.history.ToString() != null
-            ? JsonConvert.DeserializeObject<List<History>>(result.history.ToString())
-            : default(List<History>);
-
+            employees = new List<Employee>();
+            clients = new List<ModelClient>();
+            contracts = new List<Contract>();
+            histories = new List<History>();
             generatedIds = new HashSet<int>();
+
+            this.configuration = cfg;
+
+            DbContextOptionsBuilder<SimpleTrackerContext> dbcb = new DbContextOptionsBuilder<SimpleTrackerContext>();
+            dbcb.UseSqlServer<SimpleTrackerContext>(cfg.GetConnectionString("DefaultConnection"));
+            Console.WriteLine(cfg.GetConnectionString("DefaultConnection"));
+            ctxt = new SimpleTrackerContext(dbcb.Options);
+
+            employees = ctxt.Set<Employee>().ToList<Employee>();
         }
 
         static int GetNewID()

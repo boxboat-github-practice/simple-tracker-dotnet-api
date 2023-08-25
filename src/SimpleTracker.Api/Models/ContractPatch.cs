@@ -18,6 +18,7 @@ using System.Runtime.Serialization;
 using Newtonsoft.Json;
 using SimpleTracker.Api.Converters;
 using System.Dynamic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SimpleTracker.Api.Models
 {
@@ -73,6 +74,7 @@ namespace SimpleTracker.Api.Models
         /// Gets or Sets Tech
         /// </summary>
         [Required]
+        [NotMapped]
         [DataMember(Name="tech", EmitDefaultValue=false)]
         public string[] Tech { get; set; }
 
