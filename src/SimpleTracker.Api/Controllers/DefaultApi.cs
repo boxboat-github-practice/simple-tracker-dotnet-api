@@ -458,10 +458,9 @@ namespace SimpleTracker.Api.Controllers
         [SwaggerResponse(statusCode: 200, type: typeof(List<Employee>), description: "OK")]
         public virtual IActionResult EmployeesGet()
         {
-
             //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
             // return StatusCode(200, default(List<Employee>));
-            return new ObjectResult(employees);
+            return new ObjectResult(ctxt.Set<Employee>().ToList<Employee>());
         }
 
         /// <summary>
@@ -482,20 +481,16 @@ namespace SimpleTracker.Api.Controllers
             //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
             // return StatusCode(200, default(Employee));
             Employee e = new Employee();
-            e.Id = GetNewID();
             e.Github = employeesPostRequest.Github;
             e.Name = employeesPostRequest.Name;
+            e.UpdatedAt = DateTimeOffset.Now;
+            e.CreatedAt = DateTimeOffset.Now;
 
             employees.Add(e);
+            ctxt.Add(e);
+            ctxt.SaveChanges();
 
-            string newEmployeeJson = null;
-            newEmployeeJson = e.ToJson();
-
-            var newEmployee = newEmployeeJson != null
-            ? JsonConvert.DeserializeObject<Employee>(newEmployeeJson)
-            : default(Employee);
-
-            return new ObjectResult(newEmployee);
+            return new ObjectResult(e);
         }
 
         /// <summary>
